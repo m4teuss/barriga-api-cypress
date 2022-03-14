@@ -2,56 +2,44 @@
 //const faker = require('faker')
 
 describe('test api', () => {
-
-    beforeEach(() =>{
-        // logar // eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6MX0._8dEoo99USVc5NdBo3wMyWfmjX2lwaVhJs9YbNn_WWM
-
+let token
+    before(() => {
+        cy.PegarToken('a@a', 'a') // Passando usuario e senha para função, a mesma retornará o token válido
+        .then(tokenRecebe => {  // atraves do "then" pego o token válido vindo da função 
+            token = tokenRecebe
+            
+        })  
     })
 
 
-    it('logar', () => {
-        cy.request({
-            method: 'POST',
-            url:  'https://barrigarest.wcaquino.me/signin',
-            // body é um objeto, aqui estamos fazendo requisição para API 
-            body: {
-                 email: "a@a",
-                 senha: "a", 
-                 redirecionar: false
-            }
-
-        // como fizemos uma requisição acima, api nos retorna uma resposta.
-        }).its('body.token').should('not.be.empty') // body não deve estar vazio
-
-          .then(token => {  //aqui tenho valor do token
-            
+    it('Criar conta', () => {
+       
             cy.request({
                 method: 'POST',
                 url: 'https://barrigarest.wcaquino.me/contas',
                 headers:{
-                    Authorization: `JWT ${token}`,  // Request Headers: autorization passo a chave de autenticação
+                    Authorization: `JWT ${token}`,  // Request Headers: autorization passo a chave de autenticação.
                 },
 
+                // No body passo valores para serem inseridos
                 body: {
-                    nome: 'Conta via reset55'
+                    nome: 'Conta via reset1231'
                 }
         
-        }).as('response')
+        }).as('response') // criando apelido 
         
-    })
 
-    cy.get('@response').then(res => {
-
-        expect(res.status).to.be.equal(201) // validando status code
-        expect(res.body).to.have.property('id') // id dinamico, validamos somente atributo
-        expect(res.body).to.have.property('nome',  'Conta via reset4')
-
+        // validar a respostas vinda da requsição feita 
+        cy.get('@response').then(res => {
+            expect(res.status).to.be.equal(201) // validando status code
+            expect(res.body).to.have.property('id') // id dinamico, validamos somente atributo
+            expect(res.body).to.have.property('nome',  'Conta via reset1231')
 
 
-    })
 
+    }) // fecha response
 
-})
+}) // fecha o it = cenário
 
 
 }) //fecha describe

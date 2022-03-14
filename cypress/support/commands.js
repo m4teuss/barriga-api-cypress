@@ -1,25 +1,22 @@
-// ***********************************************
-// This example commands.js shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+
+// Aqui faço login na aplicação, pego token valido e retono para ser usado na criação de conta.
+Cypress.Commands.add('PegarToken', (usuario, senha) => {
+   
+     cy.request({
+        method: 'POST',
+        url:  'https://barrigarest.wcaquino.me/signin',
+
+        // body é um objeto, aqui estamos fazendo requisição para API 
+        body: {
+             email: usuario,
+             senha: senha, 
+             redirecionar: false
+        }
+
+        // como fizemos uma requisição acima, api nos retorna uma resposta.
+        }).its('body.token').should('not.be.empty') //reduzir o escopo apenas para o token, verificar token não deve estar vazio
+
+        .then(token => {
+            return token;
+        })
+})
