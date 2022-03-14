@@ -18,5 +18,8 @@
   "homepage": "https://github.com/m4teuss/api-cypress#readme",
   "devDependencies": {
     "cypress": "^9.5.1"
+  },
+  "dependencies": {
+    "faker": "^6.6.6"
   }
 }
